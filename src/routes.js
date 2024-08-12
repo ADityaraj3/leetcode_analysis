@@ -12,6 +12,7 @@ import SignUp from "layouts/authentication/sign-up";
 import Icon from "@mui/material/Icon";
 import { getCookie } from "utlis/cookieUtils";
 import Logout from "layouts/authentication/log-out";
+import TopicDetail from "layouts/topicDetails";
 
 const isAuthenticated = () => {
   return getCookie('userName') !== ''; // Check if the userName cookie exists
@@ -52,15 +53,15 @@ const routes = [
     component: <Tables />,
     private: true, // Mark as private route
   },
-  {
-    type: "collapse",
-    name: "Billing",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <Billing />,
-    private: true, // Mark as private route
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Billing",
+  //   key: "billing",
+  //   icon: <Icon fontSize="small">receipt_long</Icon>,
+  //   route: "/billing",
+  //   component: <Billing />,
+  //   private: true, // Mark as private route
+  // },
   // {
   //   type: "collapse",
   //   name: "RTL",
@@ -88,6 +89,17 @@ const routes = [
     component: <Profile />,
     private: true, // Mark as private route
   },
+  {
+    type: "collapse",
+    name: "Topic Detail",
+    key: "topic-detail",
+    icon: <Icon fontSize="small">topic</Icon>,
+    route: "/topicDetail/:topicName/:totalQuestions/:problemsSolved",
+    component: <TopicDetail />,
+    private: true, // Mark as private route if needed
+  },
 ];
 
 export default routes;
+
+

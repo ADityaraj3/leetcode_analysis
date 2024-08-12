@@ -27,12 +27,61 @@ import MDProgress from "components/MDProgress";
 // Images
 import LogoAsana from "assets/images/small-logos/logo-asana.svg";
 import logoGithub from "assets/images/small-logos/github.svg";
-import logoAtlassian from "assets/images/small-logos/logo-atlassian.svg";
+// import logoAtlassian from "assets/images/small-logos/logo-atlassian.svg";
 import logoSlack from "assets/images/small-logos/logo-slack.svg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 import logoInvesion from "assets/images/small-logos/logo-invision.svg";
+import { getCookie } from "utlis/cookieUtils";
+import { useState, useEffect } from "react";
+import { tagProblemCounts } from "utlis/total_questions";
+import { useNavigate } from "react-router-dom";
+import { Pagination } from "@mui/material";
 
-export default function data() {
+export default function ProjectsTableData() {
+  const username = getCookie('userName');
+  const [topicData, setTopicData] = useState([]);
+  const navigate = useNavigate();
+
+  const deSlugify = (str) => {
+    let formattedName = str.replace('-', ' ');
+
+    formattedName = formattedName.split(' ').map(word => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(' ');
+
+    return formattedName;
+  };
+
+  const fetchTopicData = async () => {
+    const response = await fetch('http://localhost:3001/typeofquestionssolved', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username
+      })
+    });
+
+    const result = await response.json();
+
+    const fetchedTopicData = [
+      ...result.data.matchedUser.tagProblemCounts.fundamental,
+      ...result.data.matchedUser.tagProblemCounts.intermediate,
+      ...result.data.matchedUser.tagProblemCounts.advanced
+    ];
+
+    setTopicData(fetchedTopicData);
+  };
+
+  useEffect(() => {
+    fetchTopicData();
+  }, [username]);
+
+  const handleRowClick = async (topicName, totalQuestions, problemsSolved) => {
+    navigate(`/topicDetail/${topicName}/${totalQuestions}/${problemsSolved}`);
+  };
+
   const Project = ({ image, name }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" variant="rounded" />
@@ -53,130 +102,31 @@ export default function data() {
     </MDBox>
   );
 
-  return {
-    columns: [
-      { Header: "project", accessor: "project", width: "30%", align: "left" },
-      { Header: "budget", accessor: "budget", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
-      { Header: "completion", accessor: "completion", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
-    ],
+  const columns = [
+    { Header: "topic", accessor: "topic", width: "30%", align: "left" },
+    { Header: "questions", accessor: "questions", align: "left" },
+    { Header: "completion", accessor: "completion", align: "center" },
+    { Header: "action", accessor: "action", align: "center" },
+  ];
 
-    rows: [
-      {
-        project: <Project image={LogoAsana} name="Asana" />,
-        budget: (
-          <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-            $2,500
-          </MDTypography>
-        ),
-        status: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            working
-          </MDTypography>
-        ),
-        completion: <Progress color="info" value={60} />,
-        action: (
-          <MDTypography component="a" href="#" color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
-        ),
-      },
-      {
-        project: <Project image={logoGithub} name="Github" />,
-        budget: (
-          <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-            $5,000
-          </MDTypography>
-        ),
-        status: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            done
-          </MDTypography>
-        ),
-        completion: <Progress color="success" value={100} />,
-        action: (
-          <MDTypography component="a" href="#" color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
-        ),
-      },
-      {
-        project: <Project image={logoAtlassian} name="Atlassian" />,
-        budget: (
-          <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-            $3,400
-          </MDTypography>
-        ),
-        status: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            canceled
-          </MDTypography>
-        ),
-        completion: <Progress color="error" value={30} />,
-        action: (
-          <MDTypography component="a" href="#" color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
-        ),
-      },
-      {
-        project: <Project image={logoSpotify} name="Spotify" />,
-        budget: (
-          <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-            $14,000
-          </MDTypography>
-        ),
-        status: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            working
-          </MDTypography>
-        ),
-        completion: <Progress color="info" value={80} />,
-        action: (
-          <MDTypography component="a" href="#" color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
-        ),
-      },
-      {
-        project: <Project image={logoSlack} name="Slack" />,
-        budget: (
-          <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-            $1,000
-          </MDTypography>
-        ),
-        status: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            canceled
-          </MDTypography>
-        ),
-        completion: <Progress color="error" value={0} />,
-        action: (
-          <MDTypography component="a" href="#" color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
-        ),
-      },
-      {
-        project: <Project image={logoInvesion} name="Invesion" />,
-        budget: (
-          <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
-            $2,300
-          </MDTypography>
-        ),
-        status: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            done
-          </MDTypography>
-        ),
-        completion: <Progress color="success" value={100} />,
-        action: (
-          <MDTypography component="a" href="#" color="text">
-            <Icon>more_vert</Icon>
-          </MDTypography>
-        ),
-      },
-    ],
-  };
+  const rows = topicData.map((topic) => {
+    const totalQuestions = tagProblemCounts[topic.tagSlug] || 1; // Default to 1 to avoid division by zero
+
+    return {
+      topic: <Project image={LogoAsana} name={topic.tagName} />,
+      questions: (
+        <MDTypography component="a" href={`/topicDetail/${topic.tagName}/${totalQuestions}/${topic.problemsSolved}`} variant="button" color="text" fontWeight="medium" onClick={() => handleRowClick(topic.tagName, totalQuestions, topic.problemsSolved)} cursor="pointer">
+          {`${topic.problemsSolved} / ${totalQuestions}`}
+        </MDTypography>
+      ),
+      completion: <Progress color="info" href={`/topicDetail/${topic.tagName}/${totalQuestions}/${topic.problemsSolved}`} value={((topic.problemsSolved / totalQuestions) * 100).toFixed(1)} onClick={() => handleRowClick(topic.tagName, totalQuestions, topic.problemsSolved)} />,
+      action: (
+        <MDTypography component="a" href={`/topicDetail/${topic.tagName}/${totalQuestions}/${topic.problemsSolved}`} color="text" onClick={() => handleRowClick(topic.tagName, totalQuestions, topic.problemsSolved)}>
+          <Icon>more_vert</Icon>
+        </MDTypography>
+      ),
+    };
+  });
+
+  return { columns, rows };
 }

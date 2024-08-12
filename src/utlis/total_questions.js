@@ -1,70 +1,73 @@
-export const array_total = 1704;
-export const string_total = 713;
-export const hash_table_total = 620;
-export const dynamic_programming_total = 517;
-export const math_total = 509;
-export const sorting_total = 409;
-export const greedy_total = 373;
-export const depth_first_search_total = 291;
-export const database_total = 278;
-export const binary_search_total = 271;
-export const breadth_first_search_total = 230;
-export const tree_total = 230;
-export const matrix_total = 227;
-export const bit_manipulation_total = 219;
-export const two_pointers_total = 203;
-export const binary_tree_total = 175;
-export const heap_priority_queue_total = 170;
-export const prefix_sum_total = 166;
-export const stack_total = 158;
-export const simulation_total = 154;
-export const graph_total = 143;
-export const counting_total = 136;
-export const design_total = 123;
-export const sliding_window_total = 122;
-export const backtracking_total = 102;
-export const union_find_total = 83;
-export const linked_list_total = 77;
-export const ordered_set_total = 61;
-export const monotonic_stack_total = 61;
-export const number_theory_total = 56;
-export const trie_total = 53;
-export const segment_tree_total = 48;
-export const divide_and_conquer_total = 47;
-export const queue_total = 46;
-export const recursion_total = 46;
-export const bitmask_total = 45;
-export const binary_search_tree_total = 40;
-export const geometry_total = 38;
-export const memoization_total = 38;
-export const binary_indexed_tree_total = 38;
-export const hash_function_total = 36;
-export const combinatorics_total = 35;
-export const topological_sort_total = 32;
-export const string_matching_total = 30;
-export const shortest_path_total = 28;
-export const rolling_hash_total = 28;
-export const game_theory_total = 27;
-export const interactive_total = 23;
-export const data_stream_total = 20;
-export const brainteaser_total = 17;
-export const monotonic_queue_total = 16;
-export const randomized_total = 12;
-export const merge_sort_total = 12;
-export const iterator_total = 9;
-export const doubly_linked_list_total = 9;
-export const concurrency_total = 9;
-export const probability_and_statistics_total = 7;
-export const quickselect_total = 7;
-export const suffix_array_total = 7;
-export const counting_sort_total = 6;
-export const bucket_sort_total = 6;
-export const minimum_spanning_tree_total = 5;
-export const shell_total = 4;
-export const line_sweep_total = 4;
-export const reservoir_sampling_total = 4;
-export const strongly_connected_component_total = 3;
-export const eulerian_circuit_total = 3;
-export const radix_sort_total = 3;
-export const rejection_sampling_total = 2;
-export const biconnected_component_total = 1;
+export const tagProblemCounts = {
+    'array': 1704,
+    'matrix': 713,
+    'string': 620,
+    'dynamic-programming': 517,
+    'math': 509,
+    'sorting': 409,
+    'greedy': 373,
+    'depth-first-search': 291,
+    'database': 278,
+    'binary-search': 271,
+    'breadth-first-search': 230,
+    'tree': 230,
+    'bit-manipulation': 219,
+    'two-pointers': 203,
+    'binary-tree': 175,
+    'heap-priority-queue': 170,
+    'prefix-sum': 166,
+    'stack': 158,
+    'simulation': 154,
+    'graph': 143,
+    'counting': 136,
+    'design': 123,
+    'sliding-window': 122,
+    'backtracking': 102,
+    'union-find': 83,
+    'linked-list': 77,
+    'ordered-set': 61,
+    'monotonic-stack': 61,
+    'number-theory': 56,
+    'trie': 53,
+    'enumeration': 88,
+    'segment-tree': 48,
+    'divide-and-conquer': 47,
+    'queue': 46,
+    'recursion': 46,
+    'bitmask': 45,
+    'binary-search-tree': 40,
+    'geometry': 38,
+    'memoization': 38,
+    'binary-indexed-tree': 38,
+    'hash-function': 36,
+    'hash-table': 620,
+    'combinatorics': 35,
+    'topological-sort': 32,
+    'string-matching': 30,
+    'shortest-path': 28,
+    'rolling-hash': 28,
+    'game-theory': 27,
+    'interactive': 23,
+    'data-stream': 20,
+    'brainteaser': 17,
+    'monotonic-queue': 16,
+    'randomized': 12,
+    'merge-sort': 12,
+    'iterator': 9,
+    'doubly-linked-list': 9,
+    'concurrency': 9,
+    'probability-and-statistics': 7,
+    'quickselect': 7,
+    'suffix-array': 7,
+    'counting-sort': 6,
+    'bucket-sort': 6,
+    'minimum-spanning-tree': 5,
+    'shell': 4,
+    'line-sweep': 4,
+    'reservoir-sampling': 4,
+    'strongly-connected-component': 3,
+    'eulerian-circuit': 3,
+    'radix-sort': 3,
+    'rejection-sampling': 2,
+    'biconnected-component': 1
+};
