@@ -7,6 +7,10 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.post('/langstats', async (req, res) => {
   const { username } = req.body;
 
