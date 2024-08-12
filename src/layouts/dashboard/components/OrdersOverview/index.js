@@ -23,13 +23,70 @@ import MDTypography from "components/MDTypography";
 
 // Material Dashboard 2 React example components
 import TimelineItem from "examples/Timeline/TimelineItem";
+import { useEffect, useState } from "react";
+import { getCookie } from "utlis/cookieUtils";
+import { FaJava, FaPython, FaJs, FaDatabase } from 'react-icons/fa';
+import { TbBrandCpp } from "react-icons/tb";
+
 
 function OrdersOverview() {
+
+  const [languageStats, setLanguageStats] = useState([]);
+  const username = getCookie("userName");
+
+  useEffect(() => {
+    getLangData();
+  }, []);
+
+  const getLangData = async () => {
+    const response = await fetch('http://localhost:3001/langstats', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.errors) {
+      console.log(result.errors);
+      return;
+    }
+
+    const data = result.data.matchedUser.languageProblemCount;
+
+    // Transform data to include icons
+    const languageIconMap = {
+      "C++": <TbBrandCpp />,
+      "Java": <FaJava />,
+      "Python": <FaPython />,
+      "Python3": <FaPython />,
+      "MySQL": <FaDatabase />,
+      "JavaScript": <FaJs />
+    };
+
+    const transformedData = data
+      .map(item => ({
+        languageName: item.languageName,
+        problemsSolved: item.problemsSolved,
+        icon: languageIconMap[item.languageName] || null // Use null if icon is not found
+      }))
+      .sort((a, b) => b.problemsSolved - a.problemsSolved)
+      .slice(0, 9);
+
+    setLanguageStats(transformedData);
+  };
+
+
+
   return (
     <Card sx={{ height: "100%" }}>
       <MDBox pt={3} px={3}>
         <MDTypography variant="h6" fontWeight="medium">
-          Orders overview
+          Language overview
         </MDTypography>
         <MDBox mt={0} mb={2}>
           <MDTypography variant="button" color="text" fontWeight="regular">
@@ -38,44 +95,21 @@ function OrdersOverview() {
             </MDTypography>
             &nbsp;
             <MDTypography variant="button" color="text" fontWeight="medium">
-              24%
+              Top
             </MDTypography>{" "}
-            this month
+            9 languages used
           </MDTypography>
         </MDBox>
       </MDBox>
       <MDBox p={2}>
-        <TimelineItem
-          color="success"
-          icon="notifications"
-          title="$2400, Design changes"
-          dateTime="22 DEC 7:20 PM"
-        />
-        <TimelineItem
-          color="error"
-          icon="inventory_2"
-          title="New order #1832412"
-          dateTime="21 DEC 11 PM"
-        />
-        <TimelineItem
-          color="info"
-          icon="shopping_cart"
-          title="Server payments for April"
-          dateTime="21 DEC 9:34 PM"
-        />
-        <TimelineItem
-          color="warning"
-          icon="payment"
-          title="New card added for order #4395133"
-          dateTime="20 DEC 2:20 AM"
-        />
-        <TimelineItem
-          color="primary"
-          icon="vpn_key"
-          title="New card added for order #4395133"
-          dateTime="18 DEC 4:54 AM"
-          lastItem
-        />
+        {languageStats.map((item, index) => (
+          <TimelineItem
+            key={index}
+            title={item.languageName}
+            dateTime={`Problems Solved: ${item.problemsSolved}`}
+            icon={item.icon}
+          />
+        ))}
       </MDBox>
     </Card>
   );

@@ -46,21 +46,43 @@ import { setCookie } from "utlis/cookieUtils";
 function Basic() {
 
   const [userName, setUserName] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleUserNameChange = (event) => {
     setUserName(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
+    console.log(userName)
     if (userName) {
       setCookie("userName", userName);
-      window.location.href = "/dashboard";
+
+      const data = {
+        username: userName,
+      };
+
+      const response = await fetch('http://localhost:3001/leetcode-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      console.log(response)
+
+      if (!response.ok) {
+        setShowAlert(true);
+        return;
+      }
+
+      window.location.href = '/dashboard';
     }
 
-    else{
-      MDAlert("Please enter a username");
+    else {
+      setShowAlert(true);
     }
 
   };
@@ -103,17 +125,21 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="Leetcode Username" fullWidth onChange ={(ev) =>handleUserNameChange(ev)} />
+              <MDInput type="text" label="Leetcode Username" fullWidth onChange={(ev) => handleUserNameChange(ev)} />
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={(ev) => handleSubmit(ev)}>
                 sign in
               </MDButton>
             </MDBox>
-            
           </MDBox>
         </MDBox>
       </Card>
+      {showAlert && (
+        <MDAlert color="error" dismissible>
+          Please enter a valid username
+        </MDAlert>
+      )}
     </BasicLayout>
   );
 }

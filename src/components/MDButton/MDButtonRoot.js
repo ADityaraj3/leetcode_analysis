@@ -38,22 +38,23 @@ export default styled(Button)(({ theme, ownerState }) => {
     // boxShadow value
     const boxShadowValue = colored[color]
       ? `${boxShadow([0, 3], [3, 0], palette[color].main, 0.15)}, ${boxShadow(
-          [0, 3],
-          [1, -2],
-          palette[color].main,
-          0.2
-        )}, ${boxShadow([0, 1], [5, 0], palette[color].main, 0.15)}`
+        [0, 3],
+        [1, -2],
+        palette[color].main,
+        0.2
+      )}, ${boxShadow([0, 1], [5, 0], palette[color].main, 0.15)}`
       : "none";
 
     // boxShadow value when button is hovered
     const hoveredBoxShadowValue = colored[color]
-      ? `${boxShadow([0, 14], [26, -12], palette[color].main, 0.4)}, ${boxShadow(
-          [0, 4],
-          [23, 0],
-          palette[color].main,
-          0.15
-        )}, ${boxShadow([0, 8], [10, -5], palette[color].main, 0.2)}`
+      ? `${boxShadow([0, 18], [30, -15], palette[color].main, 0.5)}, ${boxShadow(
+        [0, 6],
+        [28, 0],
+        palette[color].main,
+        0.2
+      )}, ${boxShadow([0, 10], [15, -7], palette[color].main, 0.3)}`
       : "none";
+
 
     // color value
     let colorValue = white.main;
@@ -156,21 +157,21 @@ export default styled(Button)(({ theme, ownerState }) => {
     // boxShadow value
     const boxShadowValue = colored[color]
       ? `${boxShadow([0, 3], [3, 0], palette[color].main, 0.15)}, ${boxShadow(
-          [0, 3],
-          [1, -2],
-          palette[color].main,
-          0.2
-        )}, ${boxShadow([0, 1], [5, 0], palette[color].main, 0.15)}`
+        [0, 3],
+        [1, -2],
+        palette[color].main,
+        0.2
+      )}, ${boxShadow([0, 1], [5, 0], palette[color].main, 0.15)}`
       : "none";
 
     // boxShadow value when button is hovered
     const hoveredBoxShadowValue = colored[color]
       ? `${boxShadow([0, 14], [26, -12], palette[color].main, 0.4)}, ${boxShadow(
-          [0, 4],
-          [23, 0],
-          palette[color].main,
-          0.15
-        )}, ${boxShadow([0, 8], [10, -5], palette[color].main, 0.2)}`
+        [0, 4],
+        [23, 0],
+        palette[color].main,
+        0.15
+      )}, ${boxShadow([0, 8], [10, -5], palette[color].main, 0.2)}`
       : "none";
 
     // color value
