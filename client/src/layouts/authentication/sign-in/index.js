@@ -63,7 +63,7 @@ function Basic() {
         username: userName,
       };
 
-      const response = await fetch('http://localhost:3001/leetcode-profile', {
+      const response = await fetch('https://leetcode-analysis-backend.vercel.app/leetcode-profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

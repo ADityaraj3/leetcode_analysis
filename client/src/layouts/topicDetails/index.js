@@ -15,10 +15,11 @@ function TopicDetail() {
     const [firstTwoPoints, setFirstTwoPoints] = useState([]);
     const [remainingPoints, setRemainingPoints] = useState([]);
 
+    const apiKey = process.env.GOOGLE_API_KEY;
 
     const fetchTopicInfo = async () => {
-        const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBsfdiGRLba50_uOaBGFrQxuSrQ8PGt0b4';
-        const headers = {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+        const headers = { 
             'Content-Type': 'application/json'
         };
 

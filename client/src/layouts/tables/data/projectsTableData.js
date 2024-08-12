@@ -53,7 +53,7 @@ export default function ProjectsTableData() {
   };
 
   const fetchTopicData = async () => {
-    const response = await fetch('http://localhost:3001/typeofquestionssolved', {
+    const response = await fetch('https://leetcode-analysis-backend.vercel.app/typeofquestionssolved', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

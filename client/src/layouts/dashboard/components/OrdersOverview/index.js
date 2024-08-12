@@ -39,7 +39,7 @@ function OrdersOverview() {
   }, []);
 
   const getLangData = async () => {
-    const response = await fetch('http://localhost:3001/langstats', {
+    const response = await fetch('https://leetcode-analysis-backend.vercel.app/langstats', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

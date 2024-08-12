@@ -65,6 +65,7 @@ function Dashboard() {
   const [topicData, setTopicData] = useState([]);
   const [geminiAnalytics, setGeminiAnalytics] = useState('');
   const [geminiAnalyticsPoints, setGeminiAnalyticsPoints] = useState([]);
+  const apiKey = process.env.GOOGLE_API_KEY;
 
   useEffect(() => {
     setIsLoading(true);
@@ -91,7 +92,7 @@ function Dashboard() {
   };
 
   const fetchTopicData = async () => {
-    const response = await fetch('http://localhost:3001/typeofquestionssolved', {
+    const response = await fetch('https://leetcode-analysis-backend.vercel.app/typeofquestionssolved', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -127,7 +128,7 @@ function Dashboard() {
 
   async function generateContent(topicData) {
     setIsLoading(true);
-    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBsfdiGRLba50_uOaBGFrQxuSrQ8PGt0b4';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     const headers = {
       'Content-Type': 'application/json'
     };
@@ -186,7 +187,7 @@ function Dashboard() {
 
   const getSubmisionsData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/submissionstats', {
+      const response = await fetch('https://leetcode-analysis-backend.vercel.app/submissionstats', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -228,7 +229,7 @@ function Dashboard() {
 
   const submissionTimeStats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/userstreakstats', {
+      const response = await fetch('https://leetcode-analysis-backend.vercel.app/userstreakstats', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -269,7 +270,7 @@ function Dashboard() {
     try {
       const previousYear = new Date().getFullYear() - 1;
 
-      const response = await fetch('http://localhost:3001/userstreakstats', {
+      const response = await fetch('https://leetcode-analysis-backend.vercel.app/userstreakstats', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -355,7 +356,7 @@ function Dashboard() {
 
   const fetchWeeklyQuestionData = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/userstreakstats?username=${username}`);
+      const response = await fetch(`https://leetcode-analysis-backend.vercel.app/userstreakstats`);
       const result = await response.json();
 
       const timeZoneData = result.data?.matchedUser?.userCalendar?.submissionCalendar;
