@@ -111,7 +111,6 @@ export default function ProjectsTableData() {
 
   const rows = topicData.map((topic) => {
     const totalQuestions = tagProblemCounts[topic.tagSlug] || 1; // Default to 1 to avoid division by zero
-
     return {
       topic: <Project image={LogoAsana} name={topic.tagName} />,
       questions: (
