@@ -128,7 +128,7 @@ function Dashboard() {
 
   async function generateContent(topicData) {
     setIsLoading(true);
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBsfdiGRLba50_uOaBGFrQxuSrQ8PGt0b4`;
     const headers = {
       'Content-Type': 'application/json'
     };
