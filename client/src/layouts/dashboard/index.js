@@ -195,7 +195,7 @@ function Dashboard() {
         })
       });
 
-      const response1 = await fetch('http://localhost:3001/questionProgress', {
+      const response1 = await fetch('https://leetcode-analysis-backend.vercel.app/questionProgress', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -230,8 +230,6 @@ function Dashboard() {
       result1.data.userProfileUserQuestionProgressV2.userSessionBeatsPercentage.forEach(item => {
         aheadOfMap.set(item.difficulty, item.percentage);
       });
-
-      console.log(aheadOfMap)
 
       setTotalQuestions({ count: difficultyMap.get("All").count, acSubmissions: acSubmissionsMap.get("All").count });
       setEasyQuestions({
