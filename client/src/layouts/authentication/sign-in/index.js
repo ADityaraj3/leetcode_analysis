@@ -56,7 +56,6 @@ function Basic() {
     event.preventDefault();
 
     if (userName) {
-      setCookie("userName", userName);
 
       const data = {
         username: userName,
@@ -82,7 +81,10 @@ function Basic() {
         return;
       }
 
+      setCookie("userName", userName);
+
       window.location.href = '/dashboard';
+      
     }
 
     else {
