@@ -43,7 +43,7 @@ import MDTypography from "components/MDTypography";
 import DataTable from "examples/Tables/DataTable";
 import LoadingScreen from "examples/loader";
 import { tagProblemCounts } from "utlis/total_questions";
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemText, Typography } from "@mui/material";
 import Notifications from "layouts/notifications";
 import MDButton from "components/MDButton";
 
@@ -54,9 +54,9 @@ function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [timeZoneMap, setTimeZoneMap] = useState(new Map());
   const [totalQuestions, setTotalQuestions] = useState({ count: 0, acSubmissions: 0 });
-  const [easyQuestions, setEasyQuestions] = useState({ count: 0, acSubmissions: 0 });
-  const [mediumQuestions, setMediumQuestions] = useState({ count: 0, acSubmissions: 0 });
-  const [hardQuestions, setHardQuestions] = useState({ count: 0, acSubmissions: 0 });
+  const [easyQuestions, setEasyQuestions] = useState({ count: 0, acSubmissions: 0, aheadOf: 0 });
+  const [mediumQuestions, setMediumQuestions] = useState({ count: 0, acSubmissions: 0, aheadOf: 0 });
+  const [hardQuestions, setHardQuestions] = useState({ count: 0, acSubmissions: 0, aheadOf: 0 });
   const [monthlyQuestionMap, setMonthlyQuestionMap] = useState(new Map());
   const [monthQuestions, setMonthQuestions] = useState({ labels: [], datasets: { label: "Questions per month", data: [] } });
   const [previousYearMonthlyQuestionMap, setPreviousYearMonthlyQuestionMap] = useState(new Map());
@@ -141,8 +141,6 @@ function Dashboard() {
 
     const result = topicData.map(topic => `${topic.tagName}-${topic.problemsSolved}`);
 
-    console.log("topicData", topicData);
-
     const requestBody = {
       contents: [
         {
@@ -172,11 +170,11 @@ function Dashboard() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-
       const jsonResponse = await response.json();
-      const responseText = jsonResponse.candidates[0].content.parts[0].text;
-      setGeminiAnalytics(responseText);
-      const points = responseText.replace('*', '').split('pointcheaa:').slice(1).map(point => point.trim());
+      const responseText = jsonResponse.candidates[0].content.parts[0].text.replace('*', '');
+      const cleanedText = responseText.replace(/\*/g, '');
+      setGeminiAnalytics(cleanedText);
+      const points = cleanedText.replace('*', '').split('pointcheaa:').slice(1).map(point => point.trim());
       setGeminiAnalyticsPoints(points);
 
       setIsLoading(false);
@@ -197,10 +195,20 @@ function Dashboard() {
         })
       });
 
+      const response1 = await fetch('http://localhost:3001/questionProgress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userSlug: username
+        })
+      });
+
       const result = await response.json();
+      const result1 = await response1.json();
 
       const { allQuestionsCount, matchedUser } = result.data;
-
       const [allQuestions, easyQuestions, mediumQuestions, hardQuestions] = allQuestionsCount;
       const [acSubmissionsAll, acSubmissionsEasy, acSubmissionsMedium, acSubmissionsHard] = matchedUser.submitStats.acSubmissionNum;
 
@@ -218,10 +226,31 @@ function Dashboard() {
         ["Hard", acSubmissionsHard]
       ]);
 
+      const aheadOfMap = new Map();
+      result1.data.userProfileUserQuestionProgressV2.userSessionBeatsPercentage.forEach(item => {
+        aheadOfMap.set(item.difficulty, item.percentage);
+      });
+
+      console.log(aheadOfMap)
+
       setTotalQuestions({ count: difficultyMap.get("All").count, acSubmissions: acSubmissionsMap.get("All").count });
-      setEasyQuestions({ count: difficultyMap.get("Easy").count, acSubmissions: acSubmissionsMap.get("Easy").count });
-      setMediumQuestions({ count: difficultyMap.get("Medium").count, acSubmissions: acSubmissionsMap.get("Medium").count });
-      setHardQuestions({ count: difficultyMap.get("Hard").count, acSubmissions: acSubmissionsMap.get("Hard").count });
+      setEasyQuestions({
+        count: difficultyMap.get("Easy").count,
+        acSubmissions: acSubmissionsMap.get("Easy").count,
+        aheadOf: aheadOfMap.get("EASY") || 0
+      });
+      setMediumQuestions({
+        count: difficultyMap.get("Medium").count,
+        acSubmissions: acSubmissionsMap.get("Medium").count,
+        aheadOf: aheadOfMap.get("MEDIUM") || 0
+      });
+      setHardQuestions({
+        count: difficultyMap.get("Hard").count,
+        acSubmissions: acSubmissionsMap.get("Hard").count,
+        aheadOf: aheadOfMap.get("HARD") || 0
+      });
+
+
     } catch (error) {
       console.error(error);
     }
@@ -411,6 +440,9 @@ function Dashboard() {
                     icon="sentiment_satisfied_alt"
                     color="success"
                     title="Easy"
+                    percentage={{
+                      amount: `Beats ${easyQuestions.aheadOf}% of users`,
+                    }}
                     count={`${easyQuestions.acSubmissions}/${easyQuestions.count}`}
                   />
                 </MDBox>
@@ -420,6 +452,9 @@ function Dashboard() {
                   <ComplexStatisticsCard
                     icon="mood_bad"
                     title="Medium"
+                    percentage={{
+                      amount: `Beats ${mediumQuestions.aheadOf}% of users`,
+                    }}
                     count={`${mediumQuestions.acSubmissions}/${mediumQuestions.count}`}
                   />
                 </MDBox>
@@ -432,9 +467,7 @@ function Dashboard() {
                     title="Hard"
                     count={`${hardQuestions.acSubmissions}/${hardQuestions.count}`}
                     percentage={{
-                      color: "success",
-                      amount: "",
-                      label: "Just updated",
+                      amount: `Beats ${hardQuestions.aheadOf}% of users`,
                     }}
                   />
                 </MDBox>
@@ -447,12 +480,8 @@ function Dashboard() {
                     <ReportsLineChart
                       color="success"
                       title="Questions per month (current year)"
-                      description={
-                        <>
-                          (<strong>+15%</strong>) increase in today sales.
-                        </>
-                      }
-                      date="updated 4 min ago"
+                      description="Current year Performance"
+                      date="just updated"
                       chart={monthQuestions}
                     />
                   </MDBox>
@@ -462,7 +491,7 @@ function Dashboard() {
                     <ReportsLineChart
                       color="dark"
                       title="Questions per month (previous year)"
-                      description="Last Campaign Performance"
+                      description="Last year Performance"
                       date="just updated"
                       chart={previousYearMonthQuestions}
                     />
@@ -472,16 +501,9 @@ function Dashboard() {
             </MDBox>
             <MDBox mt={3}>
               <Card>
-                <MDBox mx={2} my={2} display="flex" justifyContent="center">
-                  <MDButton variant="h1" textTransform="capitalize" sx={{
-                    fontSize: "33px",
-                    backgroundColor: "#49a3f1", // Example color, replace with your desired color
-                    color: '#fffff',
-                    '&:hover': {
-                      backgroundColor: "#1976d2", // Darker shade for hover effect
-                    }
-                  }} onClick={() => generateContent(topicData)} color="info">
-                    Generate Gemini Analysis of your progress
+                <MDBox mx={2} my={2} display="flex" flexDirection="column" justifyContent="center">
+                  <MDButton onClick={() => generateContent(topicData)} size ="large" variant="gradient" color="light" sx={{ fontSize: "20px" }}>
+                    Click here for Gemini Analytics
                   </MDButton>
                 </MDBox>
                 <MDBox mx={2} my={2}>

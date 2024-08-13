@@ -55,7 +55,6 @@ function Basic() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(userName)
     if (userName) {
       setCookie("userName", userName);
 
@@ -71,9 +70,14 @@ function Basic() {
         body: JSON.stringify(data),
       })
 
-      console.log(response)
+      const result = await response.json();
 
       if (!response.ok) {
+        setShowAlert(true);
+        return;
+      }
+
+      if (result.errors) {
         setShowAlert(true);
         return;
       }
@@ -106,19 +110,19 @@ function Basic() {
           </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
+              {/* <MDTypography component={MuiLink} href="#" variant="body1" color="white">
                 <FacebookIcon color="inherit" />
-              </MDTypography>
+              </MDTypography> */}
             </Grid>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
+              {/* <MDTypography component={MuiLink} href="#" variant="body1" color="white">
                 <GitHubIcon color="inherit" />
-              </MDTypography>
+              </MDTypography> */}
             </Grid>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
+              {/* <MDTypography component={MuiLink} href="#" variant="body1" color="white">
                 <GoogleIcon color="inherit" />
-              </MDTypography>
+              </MDTypography> */}
             </Grid>
           </Grid>
         </MDBox>

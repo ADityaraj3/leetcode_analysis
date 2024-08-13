@@ -245,6 +245,45 @@ app.post('/leetcode-profile', async (req, res) => {
   }
 });
 
+app.post('/questionProgress', async (req, res) => {
+  const { userSlug } = req.body;
+
+  const data = {
+    query: `
+      query userProfileUserQuestionProgressV2($userSlug: String!) {
+        userProfileUserQuestionProgressV2(userSlug: $userSlug) {
+          userSessionBeatsPercentage {
+            difficulty
+            percentage
+          }
+        }
+      }
+    `,
+    variables: {
+      userSlug
+    },
+    operationName: "userProfileUserQuestionProgressV2"
+  };
+
+  const config = {
+    method: 'post',
+    url: 'https://leetcode.com/graphql/',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+    },
+    data: JSON.stringify(data)
+  };
+
+  try {
+    const response = await axios(config);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server running on port ${port} `);
 });
